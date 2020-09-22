@@ -1,82 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  StatusBar,
-} from 'react-native';
-import requestDevices from './request/devices';
-
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import React, {useState, useEffect} from 'react';
+import {SafeAreaView, Text, StatusBar, Button} from 'react-native';
+import {mutation, query} from './api';
+import {AddDevice} from './components';
 
 declare const global: {HermesInternal: null | {}};
-
+// TODO Error handling
 const App = () => {
   const [devices, setDevices] = useState();
+  const [plants, setPlants] = useState();
+  const [showAddDevice, setShowAddDevice] = useState(false);
 
-  const getData = async () => {
-    const response = await requestDevices();
+  const getDevices = async () => {
+    const response = await query.devices();
     setDevices(response.data.devices);
-  }
+  };
 
-  useEffect(
-      () => {
-        if (!devices) {
-          getData();
-        }
-      },
-      [devices]
-  );
+  const getPlants = async () => {
+    const response = await query.plants();
+    setPlants(response.data.plants);
+  };
+
+  const addDevice = async ({label, type}: any) => {
+    const response = await mutation.addDevice({label, type});
+    setDevices(response.data.devices);
+  };
+
+  useEffect(() => {
+    if (!devices) {
+      getDevices();
+    }
+    if (!plants) {
+      getPlants();
+    }
+  }, [devices, plants]);
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <Text>Devices</Text>
-        { devices && devices.map(device => <Text key={device.id}>{device.label}</Text>)}
+        {devices &&
+          devices.map((device) => <Text key={device.id}>{device.label}</Text>)}
+        <Text>Plants</Text>
+        {plants &&
+          plants.map((plant) => <Text key={plant.id}>{plant.name}</Text>)}
+        <Button title="Add Device" onPress={() => setShowAddDevice(true)} />
+        {showAddDevice && (
+          <AddDevice
+            close={() => setShowAddDevice(false)}
+            addDevice={addDevice}
+          />
+        )}
       </SafeAreaView>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default App;

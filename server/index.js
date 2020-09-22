@@ -7,7 +7,7 @@ const cors = require('cors');
 var { plants, devices, users } = require('./data');
 
 const createdNewId = (array) => {
-  const highest = array.sort((itemA, itemB) => itemA.id - itemB.id); 
+  const highest = array.sort((itemA, itemB) => itemA.id - itemB.id);
   return highest.id + 1;
 }
 
@@ -25,8 +25,8 @@ var schema = buildSchema(`
   }
 
   input DeviceInput {
-    name: String,
-    type: String,
+    label: String!,
+    type: String!,
     plantId: Int
   }
 
@@ -47,7 +47,7 @@ var root = {
   users: () => users,
   addDevice: ({ device }) => {
     devices.push({ id: createdNewId(devices), type: device.type, label: device.label});
-    return plants;
+    return devices;
   }
 };
 
