@@ -1,7 +1,11 @@
-const domain = 'http://localhost:4000';
+const API = 'http://localhost:4000';
 
-const client = async (body) => {
-  const response = await fetch(`${domain}/graphql`, {
+interface HttpResponse<T> extends Response {
+  parsedBody?: T;
+}
+
+async function client<T>(body: string): Promise<HttpResponse<{data: T}>> {
+  const response: HttpResponse<{data: T}> = await fetch(`${API}/graphql`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -12,11 +16,18 @@ const client = async (body) => {
       query: body,
     }),
   });
-  return await response.json();
-};
+  console.log(response);
+  try {
+    // may error if there is no body
+    response.parsedBody = await response.json();
+  } catch (ex) {
+    // Handle error here
+  }
 
-const query = async (query: string) => client(query);
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+  return response;
+}
 
-const mutation = async (mutation: string) => client(mutation);
-
-export {query, mutation};
+export {client};

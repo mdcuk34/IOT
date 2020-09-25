@@ -1,7 +1,20 @@
-import {query} from './client';
+import {client} from './client';
 
-const devices = async () => query('{ devices { type, id, label } }');
+export type Device = {
+  id: number;
+  type: string;
+  label: string;
+  plantId: number;
+};
 
-const plants = async () => query('{ plants { name, id } }');
+export type Plant = {
+  name: string;
+  id: number;
+};
+
+const devices = async () =>
+  client<{devices: Device[]}>('{ devices { type, id, label, plantId } }');
+
+const plants = async () => client<{plants: Plant[]}>('{ plants { name, id } }');
 
 export {devices, plants};
