@@ -6,9 +6,11 @@ const cors = require('cors');
 
 var { plants, devices, users } = require('./data');
 
+// TODO Unit test this code
 const createdNewId = (array) => {
-  const highest = array.sort((itemA, itemB) => itemA.id - itemB.id);
-  return highest.id + 1;
+  const sortedArray = [...array].sort((itemA, itemB) => itemA.id - itemB.id);
+  const highestValue = sortedArray[sortedArray.length - 1].id;
+  return highestValue + 1;
 }
 
 var schema = buildSchema(`
