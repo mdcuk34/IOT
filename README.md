@@ -1,6 +1,16 @@
 
 # Frontend challenge
 
+## Setup
+
+#### Server
+- `cd server && yarn install`
+- `yarn start`
+
+#### Mobile App
+- `cd iotApp && yarn install`
+- `cd ios && pod install && cd ..`
+- `yarn ios`
 
 ## Challenge 
 
@@ -13,10 +23,10 @@ A skeleton web app with a lightweight express/graphql server exists with queries
 
 ## Tasks
 
-1. Build a home screen / dashboard and show the currently logged in user.
-2. Display a list of paired moisture sensors (for plants) and paired taps. You can get the list from the ```devices``` query. 
-3. Build an overlay or similar to display the pair new device flow. Use the `addDevice` mutation.
-4. Use the `plants` query to display a dropdown (or typeahead if you want to be a bit more fancy) of plants when adding a new device/sensor (a sensor belongs to a plant or more than one plant in a small area).
+- [ ] Build a home screen / dashboard and show the currently logged in user.
+- [x] Display a list of paired moisture sensors (for plants) and paired taps. You can get the list from the ```devices``` query. 
+- [x] Build an overlay or similar to display the pair new device flow. Use the `addDevice` mutation.
+- [x] Use the `plants` query to display a dropdown (or typeahead if you want to be a bit more fancy) of plants when adding a new device/sensor (a sensor belongs to a plant or more than one plant in a small area).
 
 There's a `requestDevices` method in `/utils` as an example to get you started. The server is in the `/server` dir. You can scrap the whole app if you want but this server will serve the data you need. Feel free to change anything you want. 
 
