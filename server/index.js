@@ -48,7 +48,7 @@ var root = {
   devices: () => devices,
   users: () => users,
   addDevice: ({ device }) => {
-    devices.push({ id: createdNewId(devices), type: device.type, label: device.label});
+    devices.push({ id: createdNewId(devices), type: device.type, label: device.label, plantId: device.plantId});
     return devices;
   }
 };

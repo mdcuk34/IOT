@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components/native';
 import {Text} from 'react-native';
 import {Picker} from '@react-native-community/picker';
-import {mutation} from '../api';
+import {Button} from './button';
+import {mutation, query} from '../api';
 
 type AddDeviceProps = {
   close: () => void;
   addDevice: ({label, type, plantId}: mutation.AddDevice) => void;
-  plants: any;
+  plants: query.Plant[];
 };
 
 const AddDevice = ({close, addDevice, plants}: AddDeviceProps) => {
@@ -33,14 +34,15 @@ const AddDevice = ({close, addDevice, plants}: AddDeviceProps) => {
         />
         <Picker
           selectedValue={plantId}
-          onValueChange={(itemValue) => setPlantId(itemValue)}>
+          onValueChange={(itemValue) => setPlantId(Number(itemValue))}>
           {plants.map((plant) => (
             <Picker.Item key={plant.id} label={plant.name} value={plant.id} />
           ))}
         </Picker>
-        <AddButton onPress={() => addDevice({label, type, plantId})}>
-          <AddText>ADD</AddText>
-        </AddButton>
+        <Button
+          title="Add Device"
+          onPress={() => addDevice({label, type, plantId})}
+        />
       </Container>
     </AbsoluteContainer>
   );
@@ -88,21 +90,4 @@ const Input = styled.TextInput`
   color: #102542;
   background-color: white;
   border-radius: 2px;
-`;
-
-const AddButton = styled.TouchableOpacity`
-  background-color: #102542;
-  width: 50%;
-  align-self: center;
-  color: white;
-  margin: 2%;
-  padding: 2%;
-  border-radius: 2px;
-  align-items: center;
-  align-content: center;
-`;
-
-const AddText = styled.Text`
-  color: white;
-  font-weight: bold;
 `;

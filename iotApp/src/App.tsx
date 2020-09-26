@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Text, StatusBar, Button, FlatList} from 'react-native';
+import styled from 'styled-components/native';
+import {StatusBar} from 'react-native';
 import {mutation, query} from './api';
-import {AddDevice} from './components';
+import {AddDevice, H1, Button} from './components';
 
 // App Colors
 //
@@ -14,8 +15,10 @@ import {AddDevice} from './components';
 // FFFFFF - white
 
 declare const global: {HermesInternal: null | {}};
+
 // TODO Error handling
 const App = () => {
+  // As the app grows moving parts of the state to context could make sense.
   const [devices, setDevices] = useState<undefined | query.Device[]>(undefined);
   const [devicesLoading, setDevicesLoading] = useState(true);
   const [plants, setPlants] = useState<undefined | query.Plant[]>(undefined);
@@ -48,17 +51,22 @@ const App = () => {
     }
   }, [devices, plants]);
 
-  const deviceItem = ({item}) => {
-    return <Text>{item.label}</Text>;
+  // TODO type
+  const deviceItem = ({item}: any) => {
+    return (
+      <ListItemContainer>
+        <ListItemText>{item.label}</ListItemText>
+      </ListItemContainer>
+    );
   };
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <Text>Devices</Text>
+      <Container>
+        <H1>DEVICES</H1>
         {devices && (
-          <FlatList
+          <List
             refreshing={devicesLoading}
             onRefresh={getDevices}
             data={devices}
@@ -67,8 +75,8 @@ const App = () => {
           />
         )}
         <Button title="Add Device" onPress={() => setShowAddDevice(true)} />
-      </SafeAreaView>
-      {showAddDevice && (
+      </Container>
+      {showAddDevice && plants && (
         <AddDevice
           plants={plants}
           close={() => setShowAddDevice(false)}
@@ -80,3 +88,26 @@ const App = () => {
 };
 
 export default App;
+
+const Container = styled.SafeAreaView`
+  margin: 2%;
+  flex: 1;
+`;
+
+const List = styled.FlatList`
+  padding-vertical: 2%;
+  flex: 1;
+`;
+
+// TODO pull out into it's own component
+const ListItemContainer = styled.View`
+  padding: 2%;
+  margin-vertical: 2%;
+  background-color: #f87060;
+  justify-content: center;
+  border-radius: 5px;
+`;
+
+const ListItemText = styled.Text`
+  font-size: 14px;
+`;
