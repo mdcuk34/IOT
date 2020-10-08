@@ -16,6 +16,11 @@ const AddDevice = ({close, addDevice, plants}: AddDeviceProps) => {
   const [type, onChangeType] = React.useState('Type');
   const [plantId, setPlantId] = React.useState(plants[0].id);
 
+  const AddDeviceOnPress = () => {
+    close();
+    addDevice({label, type, plantId});
+  };
+
   return (
     <AbsoluteContainer>
       <Container>
@@ -39,10 +44,7 @@ const AddDevice = ({close, addDevice, plants}: AddDeviceProps) => {
             <Picker.Item key={plant.id} label={plant.name} value={plant.id} />
           ))}
         </Picker>
-        <Button
-          title="Add Device"
-          onPress={() => addDevice({label, type, plantId})}
-        />
+        <Button title="Add Device" onPress={AddDeviceOnPress} />
       </Container>
     </AbsoluteContainer>
   );
