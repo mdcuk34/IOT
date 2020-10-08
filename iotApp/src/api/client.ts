@@ -16,7 +16,7 @@ async function client<T>(body: string): Promise<HttpResponse<{data: T}>> {
       query: body,
     }),
   });
-  console.log(response);
+
   try {
     // may error if there is no body
     response.parsedBody = await response.json();
@@ -27,6 +27,7 @@ async function client<T>(body: string): Promise<HttpResponse<{data: T}>> {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
+
   return response;
 }
 

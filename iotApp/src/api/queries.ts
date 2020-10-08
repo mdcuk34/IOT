@@ -1,5 +1,6 @@
 import {client} from './client';
 
+// TODO Generate Types from API
 export type Device = {
   id: number;
   type: string;
